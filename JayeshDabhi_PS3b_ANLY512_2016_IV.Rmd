@@ -1,0 +1,117 @@
+---
+title: "JayeshDabhi_PS3b_ANLY512_2016_IV"
+author: "Jayesh_Dabhi"
+date: "December 20, 2016"
+output: html_document
+---
+
+```{r, echo=TRUE}
+
+library(readr) 
+library(dplyr)
+data  <- read_csv("C:/Users/Jayesh/Desktop/DataBank/movie_data2.csv")
+
+
+# Missing values 'NA" removal 
+data1 <- na.omit(data)
+
+
+# Filtering data for movies rating >= 9.0
+data2 <- filter(data, rating >= 7.0 & votes > 100000)
+
+```
+
+
+Vis_1 Number of movies released by different genre and year 
+
+```{r, echo = TRUE}
+
+library(ggplot2)
+ggplot(data,aes(year, fill = genre))+geom_bar(width=1)+
+  theme_bw()+theme(legend.position = "bottom")
+
+
+```
+
+Findings : By studying constructed graph "Number of Movies Vs. Year", we can say that early years from 1900 - 1920 only very less numbers of short movies been produced. From 1920 to 1990 there was a little progress in film industry as movies of different genre been released like short, drama, comedy, actions and only one animation movie.  The time span from 1990-2010 represents great progress in film industry as all genre of different movies been released. 
+
+#----------------------------------------------------------------------------------------------------
+
+
+
+Vis_2 Comparing movie earnings by genre and market area 
+
+```{r, echo=TRUE}
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+p1 <- ggplot(data, aes(genre,domestic_earnings))+geom_boxplot(aes(fill=genre))+coord_flip()+
+    labs(x="Movie genre", y= "Domestic earnings")+
+    theme_classic()+guides(fill=FALSE)+
+    ggtitle("Comparing movie earnings by genre and market")+
+    theme(plot.title = element_text(size = 12))
+
+p2 <- ggplot(data, aes(genre,international_earnings))+geom_boxplot(aes(fill=genre))+
+  coord_flip()+
+  labs(x="Movie genre", y="Internation earnings")+
+  theme_classic()+guides(fill=FALSE)
+
+p3 <- ggplot(data, aes(genre, worldwide_earnings))+geom_boxplot(aes(fill=genre))+
+  coord_flip()+
+  labs(x="Movie genre", y="Worldwide earnings")+
+  theme_classic()+guides(fill=FALSE)
+
+grid.arrange(p1, p2, p3, nrow=3)
+
+
+```
+
+Findings: Findings : By studying constructed comparative graph "Movies genre Vs. Earnings", we can say that movies genres of drama and romance are worldwide popular in domestic and international market too as showing highest earning, while documentary earning is extremely less as small portion of population prefer to watch them. Rest of the movie genre follows the same patterns in all three market. In all three graphs, some of the outliers in action category shows highest earning alltime.   
+
+#-----------------------------------------------------------------------------------------------------------------
+
+
+
+Vis_3
+
+```{r, echo = TRUE}
+
+# Now lets compare number of movies by genre after removing missing data points
+par (mfrow = c(1,2))
+p1 <- ggplot(data,aes(year, fill = genre))+geom_bar(width=1)+ theme_bw()+
+        labs(x="Year", y="Number of movies by genre")+ggtitle("Graph with missing values")
+
+p2 <- ggplot(data1,aes(year, fill = genre))+geom_bar()+  theme_bw()+
+      labs(x="Year", y="Number of movies by genre")+ggtitle("Graph without missing values") 
+
+grid.arrange(p1, p2, ncol=2)
+
+```
+
+Findings : By studying constructed comparative graphs of "Number of Movies by genre Vs. Year" with and without missing values "NA", it visually clear that until 1990 the data collected for movies having lots many missing information as "NA". Therefore graph on right side without missing information doesn't have any movies released before 1990. As mentioned in Vis_1, the duration from 1990 to 2010 shows great progress in film industry. From this comparative graphs, we can say that accurate data collection is very important for critical data analysis.
+
+#-----------------------------------------------------------------------------------------------------------------
+
+
+
+Vis_2 
+
+```{r, echo=TRUE}
+library(ggthemes)
+ggplot(data, aes(budget, worldwide_earnings, colour= genre))+
+  geom_smooth(method = "lm", se= FALSE )+geom_point()+
+  theme_bw()+
+  labs(x="Movie budget", y="Worldwide Earnings")+
+  ggtitle("Relationship between Genre wise worldwide earnings and budge")+
+  theme_light()+
+  theme(legend.position = "bottom")
+
+
+```
+
+Findings : By studying constructed relational graph of  "Worldwide earnings Vs.Movie Budget " we can say that movie budget has immense positive on worldwide earning for the movies belongs to genres romance, actions and comedy as shows steady increase in earning with increase in budget. It increasing budget will definitely improves the quality of the movie earning more worldwide as accepted worldwide. While documentary has no effect of movie budget on earning as shows steady graph.
+
+#--------------------------------------------------------------------------------------------------------------
+
